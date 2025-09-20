@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Problem Template</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <h1>ProblemPad</h1>
+      <p class="lead card">ProblemPad helps startups and teams capture their current problems, rate impactfulness, and collect actionable reports from users to prioritize fixes and user acquisition ideas.</p>
+
+      <section class="card">
+        <h2>Describe your startup</h2>
+        <label>Startup name
+          <input type="text" id="startup-name" placeholder="ProblemPad" value="ProblemPad" />
+        </label>
+        <label>Short description (user acquisition & helping people solve problems)
+          <textarea id="startup-desc" rows="3">Helping people discover, prioritize and solve real problems; focus on user acquisition by solving high-impact issues quickly.</textarea>
+        </label>
+      </section>
+
+      <form id="problem-form" class="card">
+        <h2>List up to 3 problems</h2>
+
+        <div class="problems">
+          <!-- Problem template repeated 3 times -->
+          <div class="problem-block">
+            <label>Problem title
+              <input type="text" name="title" class="title" />
+            </label>
+            <label>Problem description
+              <textarea name="description" class="description" rows="3"></textarea>
+            </label>
+            <label>Impactfulness (1-10)
+              <input type="number" name="impact" class="impact" min="1" max="10" value="5" />
+            </label>
+            <label>Current fix / solution
+              <input type="text" name="solution" class="solution" />
+            </label>
+          </div>
+
+          <div class="problem-block">
+            <label>Problem title
+              <input type="text" name="title" class="title" />
+            </label>
+            <label>Problem description
+              <textarea name="description" class="description" rows="3"></textarea>
+            </label>
+            <label>Impactfulness (1-10)
+              <input type="number" name="impact" class="impact" min="1" max="10" value="5" />
+            </label>
+            <label>Current fix / solution
+              <input type="text" name="solution" class="solution" />
+            </label>
+          </div>
+
+          <div class="problem-block">
+            <label>Problem title
+              <input type="text" name="title" class="title" />
+            </label>
+            <label>Problem description
+              <textarea name="description" class="description" rows="3"></textarea>
+            </label>
+            <label>Impactfulness (1-10)
+              <input type="number" name="impact" class="impact" min="1" max="10" value="5" />
+            </label>
+            <label>Current fix / solution
+              <input type="text" name="solution" class="solution" />
+            </label>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="submit" id="save">Save all</button>
+          <button type="button" id="clear">Clear</button>
+        </div>
+      </form>
+
+      <section class="card" id="saved-list">
+        <h2>Saved Reports</h2>
+        <ul id="reports"></ul>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
