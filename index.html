@@ -1,89 +1,126 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <title>Problem Template</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
+    <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
     <main class="container">
       <h1>ProblemPad</h1>
       <p class="lead card">ProblemPad helps startups and teams capture their current problems, rate impactfulness, and collect actionable reports from users to prioritize fixes and user acquisition ideas.</p>
-
-      <section class="card">
+      
+      <!-- Tab Navigation -->
+      <div class="tab-navigation">
+        <button class="tab-button active" data-tab="startup">Startup</button>
+        <button class="tab-button" data-tab="problems">Problems</button>
+        <button class="tab-button" data-tab="saved-report">Saved Report</button>
+      </div>
+      
+      <!-- Startup Tab -->
+      <section class="tab-content card active" id="startup-tab">
         <h2>Describe your startup</h2>
         <label>Startup name
-          <input type="text" id="startup-name" placeholder="ProblemPad" value="ProblemPad" />
+          <input type="text" id="startup-name" placeholder="ProblemPad" value="ProblemPad"/>
         </label>
         <label>Short description (user acquisition & helping people solve problems)
           <textarea id="startup-desc" rows="3">Helping people discover, prioritize and solve real problems; focus on user acquisition by solving high-impact issues quickly.</textarea>
         </label>
+        <label>Industry/Category
+          <input type="text" id="startup-industry" placeholder="Technology, SaaS, etc."/>
+        </label>
+        <label>Target Market
+          <textarea id="startup-market" rows="2" placeholder="Describe your target customers..."></textarea>
+        </label>
+        <label>Founded Date
+          <input type="date" id="startup-founded"/>
+        </label>
       </section>
-
-      <form id="problem-form" class="card">
+      
+      <!-- Problems Tab -->
+      <section class="tab-content card" id="problems-tab">
         <h2>List up to 3 problems</h2>
-
-        <div class="problems">
-          <!-- Problem template repeated 3 times -->
-          <div class="problem-block">
-            <label>Problem title
-              <input type="text" name="title" class="title" />
-            </label>
-            <label>Problem description
-              <textarea name="description" class="description" rows="3"></textarea>
-            </label>
-            <label>Impactfulness (1-10)
-              <input type="number" name="impact" class="impact" min="1" max="10" value="5" />
-            </label>
-            <label>Current fix / solution
-              <input type="text" name="solution" class="solution" />
-            </label>
+        <form id="problem-form">
+          <div class="problems">
+            <!-- Problem 1 -->
+            <div class="problem-block">
+              <h3>Problem 1</h3>
+              <label>Problem title
+                <input type="text" name="title" class="title"/>
+              </label>
+              <label>Problem description
+                <textarea name="description" class="description" rows="3"></textarea>
+              </label>
+              <label>Impactfulness (1-10)
+                <input type="number" name="impact" class="impact" min="1" max="10" value="5"/>
+              </label>
+              <label>Current fix / solution
+                <input type="text" name="solution" class="solution"/>
+              </label>
+            </div>
+            <!-- Problem 2 -->
+            <div class="problem-block">
+              <h3>Problem 2</h3>
+              <label>Problem title
+                <input type="text" name="title" class="title"/>
+              </label>
+              <label>Problem description
+                <textarea name="description" class="description" rows="3"></textarea>
+              </label>
+              <label>Impactfulness (1-10)
+                <input type="number" name="impact" class="impact" min="1" max="10" value="5"/>
+              </label>
+              <label>Current fix / solution
+                <input type="text" name="solution" class="solution"/>
+              </label>
+            </div>
+            <!-- Problem 3 -->
+            <div class="problem-block">
+              <h3>Problem 3</h3>
+              <label>Problem title
+                <input type="text" name="title" class="title"/>
+              </label>
+              <label>Problem description
+                <textarea name="description" class="description" rows="3"></textarea>
+              </label>
+              <label>Impactfulness (1-10)
+                <input type="number" name="impact" class="impact" min="1" max="10" value="5"/>
+              </label>
+              <label>Current fix / solution
+                <input type="text" name="solution" class="solution"/>
+              </label>
+            </div>
           </div>
-
-          <div class="problem-block">
-            <label>Problem title
-              <input type="text" name="title" class="title" />
-            </label>
-            <label>Problem description
-              <textarea name="description" class="description" rows="3"></textarea>
-            </label>
-            <label>Impactfulness (1-10)
-              <input type="number" name="impact" class="impact" min="1" max="10" value="5" />
-            </label>
-            <label>Current fix / solution
-              <input type="text" name="solution" class="solution" />
-            </label>
+          <div class="actions">
+            <button type="submit" id="save">Save all</button>
+            <button type="button" id="clear">Clear</button>
           </div>
-
-          <div class="problem-block">
-            <label>Problem title
-              <input type="text" name="title" class="title" />
-            </label>
-            <label>Problem description
-              <textarea name="description" class="description" rows="3"></textarea>
-            </label>
-            <label>Impactfulness (1-10)
-              <input type="number" name="impact" class="impact" min="1" max="10" value="5" />
-            </label>
-            <label>Current fix / solution
-              <input type="text" name="solution" class="solution" />
-            </label>
-          </div>
-        </div>
-
-        <div class="actions">
-          <button type="submit" id="save">Save all</button>
-          <button type="button" id="clear">Clear</button>
-        </div>
-      </form>
-
-      <section class="card" id="saved-list">
+        </form>
+      </section>
+      
+      <!-- Saved Report Tab -->
+      <section class="tab-content card" id="saved-report-tab">
         <h2>Saved Reports</h2>
-        <ul id="reports"></ul>
+        <div id="report-display">
+          <div class="startup-summary">
+            <h3>Startup Information</h3>
+            <div id="startup-summary-content">
+              <!-- Startup info will be displayed here -->
+            </div>
+          </div>
+          <div class="problems-summary">
+            <h3>Problems Overview</h3>
+            <div id="problems-summary-content">
+              <!-- Problems will be displayed here -->
+            </div>
+          </div>
+          <ul id="reports">
+            <!-- Saved reports list will be displayed here -->
+          </ul>
+        </div>
       </section>
     </main>
-
     <script src="script.js"></script>
-  </body>
+</body>
 </html>
