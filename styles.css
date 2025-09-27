@@ -11,6 +11,7 @@
   --text-secondary: #cbd5e1;
   --shadow-light: 0 2px 4px rgba(0, 0, 0, 0.1);
   --shadow-main: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --shadow-elevated: 0 8px 24px rgba(0, 0, 0, 0.25);
   --gradient-primary: linear-gradient(135deg, #06d6a0 0%, #7c3aed 100%);
   --gradient-accent: linear-gradient(135deg, #06d6a0 0%, #22d3ee 100%);
   --gradient-secondary: linear-gradient(135deg, #7c3aed 0%, #ec4899 100%);
@@ -34,6 +35,7 @@ body {
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  position: relative;
 }
 
 .container {
@@ -75,44 +77,65 @@ body {
   box-shadow: var(--shadow-main);
 }
 
-/* Simplified tab system */
+/* Professional top-right tabs */
 .tab-container {
-  margin-bottom: 32px;
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 1000;
+  margin-bottom: 0;
 }
 
 .tabs {
   display: flex;
-  gap: 8px;
-  margin-bottom: 24px;
-  padding: 4px;
-  background: rgba(15, 23, 42, 0.8);
-  border-radius: 12px;
+  gap: 6px;
+  margin-bottom: 0;
+  padding: 6px;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 16px;
   border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-elevated);
 }
 
 .tab {
-  background: transparent;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 10px 18px;
+  border-radius: 12px;
   color: var(--text-secondary);
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: 0.025em;
   cursor: pointer;
-  transition: all 0.15s ease;
-  min-width: 100px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 90px;
+  text-align: center;
+  box-shadow: var(--shadow-light);
+  user-select: none;
 }
 
 .tab:hover {
   color: var(--text-primary);
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-main);
 }
 
 .tab.active {
-  background: var(--accent);
-  color: var(--text-primary);
-  font-weight: 600;
-  box-shadow: var(--shadow-light);
+  background: var(--gradient-primary);
+  color: #ffffff;
+  font-weight: 700;
+  border-color: transparent;
+  box-shadow: var(--shadow-main);
+  transform: translateY(-1px);
+}
+
+.tab:active {
+  transform: translateY(0);
 }
 
 /* Simplified buttons */
@@ -258,13 +281,23 @@ pre {
     border-radius: 12px;
   }
   
+  .tab-container {
+    position: relative;
+    top: auto;
+    right: auto;
+    margin-bottom: 32px;
+  }
+  
   .tabs {
     flex-direction: column;
     gap: 4px;
+    width: 100%;
   }
   
   .tab {
     text-align: center;
+    min-width: auto;
+    width: 100%;
   }
   
   button {
