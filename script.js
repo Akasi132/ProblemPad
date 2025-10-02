@@ -1,117 +1,16 @@
-// Tab functionality
-function initializeTabs() {
-  const tabButtons = document.querySelectorAll('.tab-button');
-  const tabContents = document.querySelectorAll('.tab-content');
-  
-  // Show the startup tab by default
-  showTab('startup');
-  
-  // Add event listeners to tab buttons
-  tabButtons.forEach(button => {
-    button.addEventListener('click', (e) => {
-      const tabName = e.target.getAttribute('data-tab');
-      showTab(tabName);
-    });
-  });
-  
-  function showTab(tabName) {
-    // Remove active class from all buttons and contents
-    tabButtons.forEach(btn => btn.classList.remove('active'));
-    tabContents.forEach(content => content.classList.remove('active'));
-    
-    // Add active class to clicked button and corresponding content
-    const activeButton = document.querySelector(`[data-tab="${tabName}"]`);
-    const activeContent = document.getElementById(`${tabName}-tab`);
-    
-    if (activeButton && activeContent) {
-      activeButton.classList.add('active');
-      activeContent.classList.add('active');
-    }
-  }
-}
-
-// Update startup summary in the Saved Report tab
-function updateStartupSummary() {
-  const startupName = document.getElementById('startup-name').value.trim() || 'ProblemPad';
-  const startupDesc = document.getElementById('startup-desc').value.trim();
-  const startupIndustry = document.getElementById('startup-industry').value.trim();
-  const startupMarket = document.getElementById('startup-market').value.trim();
-  const startupFounded = document.getElementById('startup-founded').value;
-  
-  const summaryContent = document.getElementById('startup-summary-content');
-  summaryContent.innerHTML = `
-    <p><strong>Name:</strong> ${escapeHtml(startupName)}</p>
-    ${startupDesc ? `<p><strong>Description:</strong> ${escapeHtml(startupDesc)}</p>` : ''}
-    ${startupIndustry ? `<p><strong>Industry:</strong> ${escapeHtml(startupIndustry)}</p>` : ''}
-    ${startupMarket ? `<p><strong>Target Market:</strong> ${escapeHtml(startupMarket)}</p>` : ''}
-    ${startupFounded ? `<p><strong>Founded:</strong> ${new Date(startupFounded).toLocaleDateString()}</p>` : ''}
-  `;
-}
-
-// Update problems summary in the Saved Report tab
-function updateProblemsSummary() {
-  const blocks = Array.from(document.querySelectorAll('.problem-block'));
-  const summaryContent = document.getElementById('problems-summary-content');
-  
-  let problemsHtml = '';
-  let problemCount = 0;
-  
-  blocks.forEach((block, index) => {
-    const titleEl = block.querySelector('.title');
-    const descEl = block.querySelector('.description');
-    const impactEl = block.querySelector('.impact');
-    const solEl = block.querySelector('.solution');
-    
-    const title = titleEl.value.trim();
-    const description = descEl.value.trim();
-    
-    if (title || description) {
-      problemCount++;
-      problemsHtml += `
-        <div class="problem-summary">
-          <h4>Problem ${index + 1}: ${escapeHtml(title) || 'Untitled'}</h4>
-          ${description ? `<p><strong>Description:</strong> ${escapeHtml(description)}</p>` : ''}
-          <p><strong>Impact Score:</strong> ${impactEl.value}/10</p>
-          ${solEl.value.trim() ? `<p><strong>Solution:</strong> ${escapeHtml(solEl.value.trim())}</p>` : ''}
-        </div>
-      `;
-    }
-  });
-  
-  if (problemCount === 0) {
-    summaryContent.innerHTML = '<p>No problems have been defined yet.</p>';
-  } else {
-    summaryContent.innerHTML = problemsHtml;
-  }
-}
-
-// Add event listeners to update summaries when fields change
-function addSummaryUpdateListeners() {
-  // Startup fields
-  const startupFields = ['startup-name', 'startup-desc', 'startup-industry', 'startup-market', 'startup-founded'];
-  startupFields.forEach(fieldId => {
-    const field = document.getElementById(fieldId);
-    if (field) {
-      field.addEventListener('input', updateStartupSummary);
-      field.addEventListener('change', updateStartupSummary);
-    }
-  });
-  
-  // Problem fields
-  const problemFields = document.querySelectorAll('.problem-block input, .problem-block textarea');
-  problemFields.forEach(field => {
-    field.addEventListener('input', updateProblemsSummary);
-    field.addEventListener('change', updateProblemsSummary);
-  });
-}
-
-// Original code with modifications
 const form = document.getElementById('problem-form');
 const reportsList = document.getElementById('reports');
 const clearBtn = document.getElementById('clear');
+const tabBtns = document.querySelectorAll('.tab-btn');
+const tabContents = document.querySelectorAll('.tab-content');
+
+
+
 const STORAGE_KEY = 'problem_reports_v1';
 
+
 function nowISO(){ return new Date().toISOString(); }
+
 
 async function fetchReports(){
   try{
@@ -123,6 +22,7 @@ async function fetchReports(){
     try{ return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }catch(_){return []}
   }
 }
+
 
 async function postReport(data){
   try{
@@ -138,6 +38,7 @@ async function postReport(data){
   }
 }
 
+
 async function deleteReportById(id){
   try{
     const res = await fetch('/api/reports/'+encodeURIComponent(id), {method:'DELETE'});
@@ -152,6 +53,7 @@ async function deleteReportById(id){
   }
 }
 
+
 async function render(){
   const list = await fetchReports();
   reportsList.innerHTML = '';
@@ -159,17 +61,20 @@ async function render(){
     reportsList.innerHTML = '<li class="small">No saved reports yet.</li>';
     return;
   }
+
+
   list.forEach((r, idx)=>{
     const li = document.createElement('li');
     const left = document.createElement('div');
-    left.innerHTML = `${escapeHtml(r.title)}<div class="meta">${escapeHtml(r.description)}</div>`;
+    left.innerHTML = `<strong>${escapeHtml(r.title)}</strong><div class="meta">${escapeHtml(r.description)}</div>`;
     const right = document.createElement('div');
-    right.innerHTML = `<div class="meta">${r.impact || r.severity} · ${new Date(r.created).toLocaleString()}</div><button data-id="${r.id}">Open</button>`;
+    right.innerHTML = `<div class="meta">${r.severity} · ${new Date(r.created).toLocaleString()}</div><button data-id="${r.id}">Open</button>`;
     li.appendChild(left);
     li.appendChild(right);
     reportsList.appendChild(li);
   });
 }
+
 
 function escapeHtml(s){
   return String(s).replace(/[&<>"']/g, c=>({
@@ -177,15 +82,13 @@ function escapeHtml(s){
   })[c]);
 }
 
+
 form.addEventListener('submit', async (e)=>{
   e.preventDefault();
   // collect startup metadata
   const startupName = document.getElementById('startup-name').value.trim() || 'ProblemPad';
   const startupDesc = document.getElementById('startup-desc').value.trim() || '';
-  const startupIndustry = document.getElementById('startup-industry').value.trim() || '';
-  const startupMarket = document.getElementById('startup-market').value.trim() || '';
-  const startupFounded = document.getElementById('startup-founded').value || '';
-  
+
   // collect up to 3 problem blocks
   const blocks = Array.from(document.querySelectorAll('.problem-block'));
   const payloads = [];
@@ -202,9 +105,6 @@ form.addEventListener('submit', async (e)=>{
       id,
       startup: startupName,
       startup_desc: startupDesc,
-      startup_industry: startupIndustry,
-      startup_market: startupMarket,
-      startup_founded: startupFounded,
       title,
       description,
       impact: Number(impactEl.value) || 5,
@@ -213,41 +113,20 @@ form.addEventListener('submit', async (e)=>{
     });
   }
   if(payloads.length === 0){ alert('Please fill at least one problem'); return; }
+
   // send each payload (backend will append to Excel)
   for(const p of payloads){ await postReport(p); }
   form.reset();
-  // Reset startup form as well
-  document.getElementById('startup-name').value = 'ProblemPad';
-  document.getElementById('startup-desc').value = 'Helping people discover, prioritize and solve real problems; focus on user acquisition by solving high-impact issues quickly.';
   await render();
-  // Update summaries after reset
-  updateStartupSummary();
-  updateProblemsSummary();
-  // Switch to saved report tab to show results
-  showTab('saved-report');
-  
-  function showTab(tabName) {
-    const tabButtons = document.querySelectorAll('.tab-button');
-    const tabContents = document.querySelectorAll('.tab-content');
-    
-    tabButtons.forEach(btn => btn.classList.remove('active'));
-    tabContents.forEach(content => content.classList.remove('active'));
-    
-    const activeButton = document.querySelector(`[data-tab="${tabName}"]`);
-    const activeContent = document.getElementById(`${tabName}-tab`);
-    
-    if (activeButton && activeContent) {
-      activeButton.classList.add('active');
-      activeContent.classList.add('active');
-    }
-  }
 });
+
 
 clearBtn.addEventListener('click', ()=>{
   if(!confirm('Clear all saved reports?')) return;
   localStorage.removeItem(STORAGE_KEY);
   render();
 });
+
 
 reportsList.addEventListener('click', async (e)=>{
   const btn = e.target.closest('button[data-id]');
@@ -256,30 +135,32 @@ reportsList.addEventListener('click', async (e)=>{
   const list = await fetchReports();
   const r = list.find(x=>x.id === id);
   if(!r) return alert('Report not found');
-  const text = `Title: ${r.title}\nImpact: ${r.impact}\nCreated: ${new Date(r.created).toLocaleString()}\n\nDescription:\n${r.description}\n\nSolution:\n${r.solution || '(none)'}\n\nDelete this report?`;
+
+  const text = `Title: ${r.title}\nSeverity: ${r.severity}\nCreated: ${new Date(r.created).toLocaleString()}\n\nDescription:\n${r.description}\n\nSolution:\n${r.solution || '(none)'}\n\nDelete this report?`;
   if(confirm(text)){
     await deleteReportById(id);
     await render();
   }
 });
 
-// Initialize everything when the page loads
-document.addEventListener('DOMContentLoaded', () => {
-  initializeTabs();
-  addSummaryUpdateListeners();
-  updateStartupSummary();
-  updateProblemsSummary();
-  render();
-});
 
-// Also run initialization immediately in case DOMContentLoaded already fired
-if (document.readyState === 'loading') {
-  // Do nothing, wait for DOMContentLoaded
-} else {
-  // DOM is already loaded
-  initializeTabs();
-  addSummaryUpdateListeners();
-  updateStartupSummary();
-  updateProblemsSummary();
-  render();
-}
+// initial render
+render();
+
+
+// Tab switching functionality
+tabBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    // Remove active class from all buttons and content
+    tabBtns.forEach(b => b.classList.remove('active'));
+    tabContents.forEach(content => content.classList.remove('active'));
+    
+    // Add active class to clicked button
+    btn.classList.add('active');
+    
+    // Show corresponding content
+    const tabId = btn.getAttribute('data-tab');
+    const tabContent = document.getElementById(`${tabId}-tab`);
+    tabContent.classList.add('active');
+  });
+});
