@@ -1,6 +1,8 @@
 const form = document.getElementById('problem-form');
 const reportsList = document.getElementById('reports');
 const clearBtn = document.getElementById('clear');
+const tabBtns = document.querySelectorAll('.tab-btn');
+const tabContents = document.querySelectorAll('.tab-content');
 
 
 const STORAGE_KEY = 'problem_reports_v1';
@@ -132,3 +134,20 @@ reportsList.addEventListener('click', async (e)=>{
 
 // initial render
 render();
+
+// Tab switching functionality
+tabBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    // Remove active class from all buttons and content
+    tabBtns.forEach(b => b.classList.remove('active'));
+    tabContents.forEach(content => content.classList.remove('active'));
+    
+    // Add active class to clicked button
+    btn.classList.add('active');
+    
+    // Show corresponding content
+    const tabId = btn.getAttribute('data-tab');
+    const tabContent = document.getElementById(`${tabId}-tab`);
+    tabContent.classList.add('active');
+  });
+});
